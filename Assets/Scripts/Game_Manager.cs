@@ -45,4 +45,9 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    public void SetState(GameState _state)
+    {
+        state = _state;
+    }
 }
