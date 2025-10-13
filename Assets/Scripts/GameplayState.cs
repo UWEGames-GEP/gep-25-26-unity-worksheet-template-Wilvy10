@@ -3,27 +3,29 @@ using UnityEngine;
 public class GameplayState : GameState
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void start()
     {
 
     }
 
     // Update is called once per frame
-    void Update()
+    public override void update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            //set state to pause
-            //state = GameState.PAUSE;
-            //hasChangedState = true;
+            has_changed_state = true;
+
+           
         }
     }
-    public void OnEnter()
+    public override void onEnter()
     {
         
     }
-    public void OnExit()
+    public override void onExit()
     {
 
     }
+
+
 }

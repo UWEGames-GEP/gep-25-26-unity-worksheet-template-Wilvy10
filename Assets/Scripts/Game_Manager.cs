@@ -1,53 +1,49 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState {GAMEPLAY,PAUSE}
-    public GameState state = GameState.GAMEPLAY;
-    public bool hasChangedState = false;
+    
+    private bool hasChangedState = false;
+    private PauseState pause = new PauseState();
+    private GameplayState gameplay = new GameplayState();
+    [SerializeField] GameState current_state;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        Debug.Log("started project");
+        current_state = gameplay;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (state == GameState.GAMEPLAY)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                state = GameState.PAUSE;
-                hasChangedState = true;
-            }
-        }else if (state == GameState.PAUSE)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                state = GameState.GAMEPLAY;
-                hasChangedState = true;
-            }
-        }
+        current_state.update();
+
     }
     private void LateUpdate()
     {
-        if (hasChangedState) 
+        if (current_state.getHasChangedState())
         {
-            hasChangedState = false;
-            if (state == GameState.GAMEPLAY)
+            //sloppy way of checking what state should be next
+            if (current_state == gameplay) 
             {
-                Time.timeScale = 1.0f;
-            }
-            else if (state == GameState.PAUSE)
+                setState(pause);
+            }else
             {
-                Time.timeScale = 0.0f;
+                setState(gameplay);
             }
+            current_state.setHasChangedState(false);
         }
+      
     }
 
-    public void SetState(GameState _state)
+    public void setState(GameState state)
     {
-        state = _state;
+        Debug.Log(state.ToString());
+        current_state.onExit();
+        current_state = state;
+        current_state.onEnter();
     }
 }
